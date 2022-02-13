@@ -11,6 +11,7 @@ class ShoppingCartRoute{
             .post( shoppingCartController.insertShoppingCart );
         this.router.route('/:id')
             .get( shoppingCartController.getShoppingCartById )
+            .patch( shoppingCartController.modifyShoppingCartById )
             .delete( shoppingCartController.deleteShoppingCartById );
     }
 }

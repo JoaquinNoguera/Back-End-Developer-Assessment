@@ -51,6 +51,29 @@ class ShoppingCartController {
         }
     }
 
+    async modifyShoppingCartById( req : Request, res: Response , next: NextFunction ) : Promise<void> {
+        try{
+            const newData = req.body;
+            const id = req.params.id;
+            const cart = await ShoppingCartModel.findByIdAndUpdate(id, newData,{ new: true });
+            if(cart){
+                res.status(200).json(cart);
+            }else{
+                const error : HttpException = {
+                    message: 'NOT FOUND',
+                    status: 404
+                }
+                next(error);
+            }
+        }catch(_){
+            const error : HttpException = {
+                message: 'INTERNAL SERVER ERROR',
+                status: 500
+            }
+            next(error);
+        }
+    }
+
     async deleteShoppingCartById( req : Request, res: Response, next: NextFunction ) : Promise<void> {
         try{
             const id = req.params.id;

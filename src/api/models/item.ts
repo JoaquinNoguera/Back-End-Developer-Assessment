@@ -8,7 +8,6 @@ const schema = new Schema({
     },
     description: {
         type: 'String',
-        required: true,
         default: ''
     },
     price: {
@@ -20,7 +19,6 @@ const schema = new Schema({
             },
             currency: {
                 type: 'String',
-                required: true,
                 default: 'USD'
             }
         },

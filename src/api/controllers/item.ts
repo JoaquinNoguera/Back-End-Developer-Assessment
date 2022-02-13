@@ -1,4 +1,5 @@
 import { Response, Request, NextFunction } from 'express';
+import { Types } from 'mongoose';
 import { ItemModel } from '../models';
 import { HttpException } from '../interfaces';
 
@@ -40,7 +41,7 @@ class ItemController {
 
     async insertItem( req : Request, res: Response , next: NextFunction ) : Promise<void> {
         try{
-            const newItem = req.body;
+            let newItem = req.body;
             const item = await ItemModel.create( newItem );
             res.status(201).json(item);            
         }catch(_){
@@ -48,13 +49,13 @@ class ItemController {
                 message: 'INTERNAL SERVER ERROR',
                 status: 500
             }
-            next(error);
+        next(error);
         }
     }
 
     async modifyItemById( req : Request, res: Response , next: NextFunction ) : Promise<void> {
         try{
-            const newData = req.body;
+            let newData = req.body;
             const id = req.params.id;
             const item = await ItemModel.findByIdAndUpdate(id, newData,{ new: true });
             if(item){

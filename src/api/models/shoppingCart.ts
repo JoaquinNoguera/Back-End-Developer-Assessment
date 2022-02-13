@@ -9,33 +9,26 @@ const itemCartShema = new Schema({
     },
     subtotal:{
         type: 'Number',
-        required: true,
-        default: async function(){
-            try{
+        default: function(){
                 switch (this.discount.discountType){
                     case ModifyPriceType.AMOUNT:{
-                        return this.itemPrice - this.discount.amount;
+                        return ( this.itemPrice - this.discount.amount ) * this.cant;
                     }
                     case ModifyPriceType.PORCENTAGE:{
-                        return this.itemPrice - ( this.itemPrice * this.discount.amount );
+                        return ( this.itemPrice - ( this.itemPrice * this.discount.amount ) ) * this.cant;
                     }
                     default: 
                         return 0;
                 }
-            }catch(err){
-                throw err;
-            }
         }
     },
     discount: {
         discountType: {
             type: 'Number',
-            required: true,
             default: ModifyPriceType.AMOUNT
         },
         amount: {
             type: 'Number',
-            required: true,
             default: 0
         }
     },
@@ -59,18 +52,17 @@ const schema = new Schema({
     },
     taxes:{
         type: 'Number',
-        required: true,
         default: 0,        
     },
     subtotal: {
         type: 'Number',
-        required: true,
         default: function() {
-            let subtotal = 0;
-            this.items.foreach( ( el : ItemCart ) => {
-                subtotal += el.subtotal;
-            });
-            return subtotal;
+            let value = 0;
+            const items : Array<ItemCart> = this.items;
+            items.forEach( el => {
+                value += el.subtotal;
+            })
+            return value;
         }
     },
     total: {
@@ -78,16 +70,13 @@ const schema = new Schema({
         default: function() {
             return this.subtotal + ( this.subtotal * this.taxes );
         },
-        require: true
     },
     abandoned: {
         type: 'Boolean',
         default: false,
-        required: true
     },
     items: {
         type: [itemCartShema],
-        required: true,
         default: []
     }
 })
