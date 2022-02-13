@@ -4,6 +4,7 @@ const urlDB = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSW
 
 console.log(urlDB);
 
+
 export default async function connect() {
     try{
         await mongoose.connect(urlDB);

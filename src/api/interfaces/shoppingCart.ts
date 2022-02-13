@@ -7,9 +7,12 @@ export default interface ShoppingCart {
     owner: String,
     taxes: Number,
     total: Number,
+    subtotal: Number,
     abandoned: Boolean,
     items: Array<ItemCart> 
 }
+
+
 
 export interface ItemCart {
     cant: number,

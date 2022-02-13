@@ -7,20 +7,24 @@ const itemCartShema = new Schema({
         required: true,
         default: 1
     },
-    subtotal: async function(){
-        try{
-            switch (this.discount.discountType){
-                case ModifyPriceType.AMOUNT:{
-                    return this.itemPrice - this.discount.amount;
+    subtotal:{
+        type: 'Number',
+        required: true,
+        default: async function(){
+            try{
+                switch (this.discount.discountType){
+                    case ModifyPriceType.AMOUNT:{
+                        return this.itemPrice - this.discount.amount;
+                    }
+                    case ModifyPriceType.PORCENTAGE:{
+                        return this.itemPrice - ( this.itemPrice * this.discount.amount );
+                    }
+                    default: 
+                        return 0;
                 }
-                case ModifyPriceType.PORCENTAGE:{
-                    return this.itemPrice - ( this.itemPrice * this.discount.amount );
-                }
-                default: 
-                    return 0;
+            }catch(err){
+                throw err;
             }
-        }catch(err){
-            throw err;
         }
     },
     discount: {

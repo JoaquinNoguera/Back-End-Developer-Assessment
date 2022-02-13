@@ -1,8 +1,8 @@
+import 'dotenv/config';
 import express, { Application } from 'express';
+import { errorHandlerMiddleware } from './api/middlewares';
 import { userRoute, itemRouter, shoppingCartRouter } from './api/routes';
 import { default as initDB } from './config'
-import { errorHandlerMiddleware } from './api/middlewares';
-import 'dotenv/config';
 
 initDB();
 
