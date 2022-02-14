@@ -19,6 +19,7 @@ class ShoppingCartController {
         try{
             const id = req.params.id;
             const cart = await ShoppingCartModel.findById(id);
+
             if( cart ){
                 res.status(200).json(cart);           
             }else{
@@ -39,8 +40,8 @@ class ShoppingCartController {
 
     async insertShoppingCart( req : Request, res: Response, next: NextFunction ) : Promise<void> {
         try{
-            const newUser = req.body;
-            const cart = await ShoppingCartModel.create( newUser );
+            const newCart = req.body;
+            const cart = await ShoppingCartModel.create( newCart );
             res.status(201).json(cart);            
         }catch(_){
             const error : HttpException = {

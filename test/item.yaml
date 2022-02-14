@@ -1,0 +1,36 @@
+config:
+  target: "http://localhost:8080"
+  phases:
+    - duration: 10
+      arrivalRate: 1
+      name: "Test item"
+  payload:
+    path: "./item.csv"
+    fields:
+      - "name"
+      - "priceNumber"
+  processor: "./processor.js"
+ 
+scenarios:
+  - name: "All request item"
+    flow:
+      - post:
+          url: "/api/item"
+          beforeRequest: generateDataItem
+          json:
+            name: "{{ name }}"
+            price: "{{ price }}"
+          capture:
+            - json: "$._id"
+              as: "id"
+      - get:
+          url: "/api/item"
+      - get:
+          url: "/api/item/{{ id }}"
+      - patch:
+          url: "/api/item/{{ id }}"
+          json:
+            name: "{{ name }}"
+            price: "{{ price }}"
+      - delete:
+          url: "/api/item/{{id}}"

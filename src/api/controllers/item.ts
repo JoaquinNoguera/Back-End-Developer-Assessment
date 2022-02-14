@@ -1,5 +1,4 @@
 import { Response, Request, NextFunction } from 'express';
-import { Types } from 'mongoose';
 import { ItemModel } from '../models';
 import { HttpException } from '../interfaces';
 

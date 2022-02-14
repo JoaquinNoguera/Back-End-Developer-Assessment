@@ -1,0 +1,37 @@
+config:
+  target: "http://localhost:8080"
+  phases:
+    - duration: 10
+      arrivalRate: 1
+      name: "Test user"
+  payload:
+    path: "./user.csv"
+    fields:
+      - "firstname"
+      - "lastname"
+      - "email"
+  processor: "./processor.js"
+ 
+scenarios:
+  - name: "All request user"
+    flow:
+      - post:
+          url: "/api/user"
+          beforeRequest: generateDataUser
+          json:
+            fullname: "{{ fullname }}"
+            email: "{{ email }}"
+          capture:
+            - json: "$._id"
+              as: "id"
+      - get:
+          url: "/api/user"
+      - get:
+          url: "/api/user/{{ id }}"
+      - patch:
+          url: "/api/user/{{ id }}"
+          json:
+            fullname: "{{ fullname }}"
+            email: "{{ email }}"
+      - delete:
+          url: "/api/user/{{id}}"

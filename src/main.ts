@@ -24,9 +24,9 @@ class Server{
     }
 
     public routes(): void {
-        this.app.use('/user',userRoute);
-        this.app.use('/item',itemRouter);
-        this.app.use('/shopping-cart',shoppingCartRouter)
+        this.app.use('/api/user',userRoute);
+        this.app.use('/api/item',itemRouter);
+        this.app.use('/api/shopping-cart',shoppingCartRouter)
     }
 
     public start(): void {

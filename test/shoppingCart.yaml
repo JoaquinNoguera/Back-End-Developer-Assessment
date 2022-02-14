@@ -1,0 +1,75 @@
+config:
+  target: "http://localhost:8080"
+  phases:
+    - duration: 10
+      arrivalRate: 1
+      name: "Test item"
+  payload:
+    -
+      path: "./item.csv"
+      fields:
+        - "name"
+        - "priceNumber"
+    -
+      path: "./user.csv"
+      fields:
+        - "firstname"
+        - "lastname"
+        - "email"
+    -
+      path: "./shoppingCart.csv"
+      fields:
+        - "cant"
+        - "taxes"
+        - "discountType"
+        - "discountAmount"
+  variables:
+     abandoned:
+        - 'true'
+  processor: "./processor.js"
+ 
+scenarios:
+  - name: "All request cart"
+    flow:
+      - post:
+          url: "/api/item"
+          beforeRequest: generateDataItem
+          json:
+            name: "{{ name }}"
+            price: "{{ price }}"
+          capture:
+            - json: "$._id"
+              as: "idItem"
+      - post:
+          url: "/api/user"
+          beforeRequest: generateDataUser
+          json:
+            fullname: "{{ fullname }}"
+            email: "{{ email }}"
+          capture:
+            - json: "$._id"
+              as: "idUser"
+      - post:
+          url: "/api/shopping-cart"
+          beforeRequest: generateDataCart
+          json:
+            taxes: "{{ taxes }}"
+            owner: "{{ idUser }}"
+            items: "{{ items }}"
+          capture:
+            - json: "$._id"
+              as: "idCart"
+      - get:
+          url: "/api/shopping-cart"
+      - get:
+          url: "/api/shopping-cart/{{ idCart }}"
+      - patch:
+          url: "/api/shopping-cart/{{ idCart }}"
+          json:
+            abandoned: "{{ abandoned }}"
+      - delete:
+          url: "/api/shopping-cart/{{idCart}}"
+      - delete:
+          url: "/api/item/{{idItem}}"
+      - delete:
+          url: "/api/user/{{idUser}}"

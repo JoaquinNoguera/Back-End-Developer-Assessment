@@ -2,6 +2,9 @@
 
 Hello, I am Joaquin Noguera V. and in this document I will give you a step by step of my thought process to complete this challenge.
 
+## Heroku url
+You can see a live example of this rest API at https://nodejs-back-end-developer-asse.herokuapp.com
+
 ## Installation
 Follow the steps below to get started with this project's development environment and run the server.
 
@@ -49,6 +52,7 @@ For the folder structure, I chose a basic approach respecting the MCV model of c
 |  |    └── routes                  # Routes files
 |  ├── config                       # Files related to configuration, such as the database configuration
 |  └── main.ts                      # Main source code
+├──test                             # All the yaml templates and csv file for the Artillery test 
 ├── .env                            # Environment Variables
 └── README.md
 ```
@@ -115,11 +119,11 @@ itemCart: {
 The entire API interacts in the same way, since it is a simple exercise, there will be the classic functionalities of an API rest for each of the objects in the database. Nevertheless in the case of further development in the future there would be one of the priority thing to change. This change will for a greater definition and clarification of each functionality that the REST API can or will be able to offer
 
 ```http
-GET /documentName                                              
-GET /documentName?id=12345678901234567890123456789012           
-POST /documentName
-PATCH /documentName?id=12345678901234567890123456789012
-DELETE /documentName?id=12345678901234567890123456789012
+GET /api/documentName                                              
+GET /api/documentName/:id           
+POST /api/documentName
+PATCH /api/documentName/:id
+DELETE /api/documentName/:id
 ```
 
 | Parameter | Type | Description |
@@ -170,6 +174,27 @@ The API returns the following status codes in its API:
 | 404 | `NOT FOUND` |
 | 500 | `INTERNAL SERVER ERROR` |
 
+
+## Artillery Test
+To perform the performance tests I chose to use Artillery, you can learn about this open-source performance testing toolkit at https://www.artillery.io/docs/
+
+Steps to run the test:
+
+1.  Install Artillery CLI, you can see the different ways to do it at https://www.artillery.io/docs/guides/getting-started/installing-artillery
+
+2. Like optional step you can modify the volume of data for each test change the follow lines in the template
+    ```yaml
+    phases:
+        -   duration: 10                  //duration of the test in seconds
+            arrivalRate: 1                //how many records are going to be send per second
+            name: "Test user"
+    ```
+3. Run any of the test comands of the package.json.
+    ``` json
+    "test:user": "artillery run test/user.yaml",
+    "test:item": "artillery run test/item.yaml",
+    "test:cart": "artillery run test/cart.yaml"
+    ```
 
 ## What would I do better?
 This is just an example and I focus mostly in what kind of basic structure I will use normally, but I left behind a lot of necessary things just like:
